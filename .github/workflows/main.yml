@@ -1,0 +1,31 @@
+name: Event Updater
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # Runs every hour. Adjust this schedule as needed.
+  workflow_dispatch:      # Allows you to manually trigger this workflow from GitHub
+
+jobs:
+  update-events:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # Use the appropriate Python version here
+
+      - name: Install dependencies
+        run: |
+          pip install requests pandas
+
+      - name: Run fetch_events.py
+        run: |
+          python fetch_events.py
+      
+      - name: Run update_excel.py
+        run: |
+          python update_excel.py
