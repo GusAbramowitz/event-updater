@@ -2,8 +2,8 @@ name: Event Updater
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Runs every hour. Adjust this schedule as needed.
-  workflow_dispatch:      # Allows you to manually trigger this workflow from GitHub
+    - cron: "0 * * * *"  # Runs every hour
+  workflow_dispatch:  # Allows you to manually trigger this workflow
 
 jobs:
   update-events:
@@ -11,16 +11,24 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.0
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.3.0
         with:
-          python-version: '3.x'  # Use the appropriate Python version here
+          python-version: '3.9'
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-python-
 
       - name: Install dependencies
         run: |
-          pip install requests pandas openpyxl
+          pip install -r requirements.txt
 
       - name: Run fetch_events.py
         run: |
