@@ -3,7 +3,7 @@ name: Event Updater
 on:
   schedule:
     - cron: "0 * * * *"  # Runs every hour
-  workflow_dispatch:  # Allows you to manually trigger this workflow
+  workflow_dispatch:      # Allows manual trigger
 
 jobs:
   update-events:
@@ -11,29 +11,21 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v2.3.0
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
-
-      - name: Cache Python dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-python-
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install -r requirements.txt  # Ensure this is the correct path
 
       - name: Run fetch_events.py
         run: |
           python fetch_events.py
-      
+
       - name: Run update_excel.py
         run: |
           python update_excel.py
