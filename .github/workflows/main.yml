@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests pandas
+          pip install requests pandas openpyxl
 
       - name: Run fetch_events.py
         run: |
